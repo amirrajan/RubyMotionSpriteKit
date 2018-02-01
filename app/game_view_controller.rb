@@ -18,9 +18,9 @@ class GameViewController < UIViewController
   def viewDidLoad
     super
     self.view = sk_view
-
     # The first time the app is loaded. Present scene one.
     present_scene_one
+    $controller = self
   end
 
   def present_scene_one

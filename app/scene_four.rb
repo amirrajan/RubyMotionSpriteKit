@@ -18,6 +18,11 @@ class SceneFour < SKScene
 
     Open scene_four.rb and read the code. Play around with it and change the particle properties to see what they do.
 
+    To jump to this scene, you can type $controller.present_scene_four into the repl.
+
+    To have an even faster feedback loop. Instead of running `rake`, run `ruby auto-build.rb`. Everytime you save a file, the app will automatically be rebuilt.
+
+    To have an EVEN FASTER feedback loop, add $controller.present_scene_four to top_level.rb.
     HERE
 
     # Spoiler alert. Buttons are just sprites. Everything is a sprite. Everything.
@@ -114,7 +119,16 @@ class SceneFour < SKScene
     end
   end
 
-  def update currentTime
+  def update _
+    bring_node_to_target_scale @button_1
+    bring_node_to_target_scale @button_2
+    bring_node_to_target_scale @button_3
+  end
+
+  def bring_node_to_target_scale node, target_scale = 1
+    scale_difference = target_scale - node.xScale
+    node.xScale += scale_difference * 0.3
+    node.yScale += scale_difference * 0.3
   end
 
   def wrap wrap_length, text
@@ -122,8 +136,8 @@ class SceneFour < SKScene
   end
 
   def add_label text
-    font_size = 16
-    wrapped_text = wrap 38, text
+    font_size = 12
+    wrapped_text = wrap 50, text
     wrapped_text.each_with_index do |s, i|
       label = SKLabelNode.labelNodeWithText s
       label.fontName = 'Courier'
@@ -143,17 +157,5 @@ class SceneFour < SKScene
     sprite.name = name
     addChild sprite
     sprite
-  end
-
-  def update _
-    bring_node_to_target_scale @button_1, 1
-    bring_node_to_target_scale @button_2, 1
-    bring_node_to_target_scale @button_3, 1
-  end
-
-  def bring_node_to_target_scale node, target_scale
-    scale_difference = target_scale - node.xScale
-    node.xScale += scale_difference * 0.3
-    node.yScale += scale_difference * 0.3
   end
 end

@@ -89,6 +89,8 @@ def run_rake
           if line =~ /Simulate/
             sleep 0.6
             ctrl_t
+            sleep 0.4
+            ctrl_t
           end
         end
         sleep 1
