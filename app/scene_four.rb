@@ -23,6 +23,8 @@ class SceneFour < SKScene
     To have an even faster feedback loop. Instead of running `rake`, run `ruby auto-build.rb`. Everytime you save a file, the app will automatically be rebuilt.
 
     To have an EVEN FASTER feedback loop, add $controller.present_scene_four to top_level.rb.
+
+    Tap with two fingers (option + tap in simulator) to load the next scene.
     HERE
 
     # Spoiler alert. Buttons are just sprites. Everything is a sprite. Everything.
@@ -50,6 +52,10 @@ class SceneFour < SKScene
       @button_3.xScale = 2
       @button_3.yScale = 2
     end
+
+    return unless touches.allObjects.count > 1
+
+    root.present_scene_five
   end
 
   # Use caution with particles, they are expensive to create and run.
@@ -65,7 +71,7 @@ class SceneFour < SKScene
       @particle_1.setParticleSpeed 1000
       @particle_1.setParticleLifetimeRange 0.5
       @particle_1.setParticleAlphaSpeed(-0.5)
-      @particle_1.setPosition CGPointMake(device_screen_width.fdiv(2), device_screen_height.fdiv(2))
+      @particle_1.setPosition CGPointMake(device_screen_width.fdiv(2), device_screen_height.fdiv(3))
       @particle_1.setParticleRotation 0.1
       @particle_1.setParticleRotationRange 6
       @particle_1.setParticlePositionRange CGVectorMake(10, 10)
@@ -88,7 +94,7 @@ class SceneFour < SKScene
       @particle_2.setParticleLifetime 10
       @particle_2.setParticleLifetimeRange 20
       @particle_2.setParticleAlphaSpeed(-0.5)
-      @particle_2.setPosition CGPointMake(device_screen_width.fdiv(2), device_screen_height.fdiv(2))
+      @particle_2.setPosition CGPointMake(device_screen_width.fdiv(2), device_screen_height.fdiv(3))
       @particle_2.setParticleRotation 0.1
       @particle_2.setParticleRotationRange 6
       @particle_2.setParticlePositionRange CGVectorMake(120, 120)
@@ -112,7 +118,7 @@ class SceneFour < SKScene
       @particle_3.particleSpeed = 90
       @particle_3.yAcceleration = -70
       @particle_3.particleAlphaSpeed = -0.3
-      @particle_3.setPosition CGPointMake(device_screen_width.fdiv(2), device_screen_height.fdiv(2))
+      @particle_3.setPosition CGPointMake(device_screen_width.fdiv(2), device_screen_height.fdiv(3))
       @particle_3.setParticlePositionRange(CGVectorMake(10, 10))
       @particle_3.particleBlendMode = SKBlendModeAlpha
       addChild @particle_3
