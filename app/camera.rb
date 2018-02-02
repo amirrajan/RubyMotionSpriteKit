@@ -18,12 +18,12 @@ class Camera
 
   def pan_left
     @target_x ||= @node.position.x
-    @target_x += 50
+    @target_x += 200 * @node.xScale
   end
 
   def pan_right
     @target_x ||= @node.position.x
-    @target_x -= 50
+    @target_x -= 200 * @node.xScale
   end
 
   def pan_up amount
@@ -32,7 +32,7 @@ class Camera
 
   def update
     differences = target_scale.round(2) - @node.xScale.round(2)
-    if differences > 0
+    if differences != 0
       @node.xScale += differences * @scale_rate
       @node.yScale += differences * @scale_rate
 

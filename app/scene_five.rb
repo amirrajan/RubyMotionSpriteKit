@@ -3,6 +3,10 @@ class SceneFive < SKScene
 
   attr_accessor :root
 
+  def get_camera
+    return @camera
+  end
+
   def didMoveToView view
     self.scaleMode = SKSceneScaleModeAspectFit
     self.backgroundColor = UIColor.whiteColor
@@ -11,6 +15,8 @@ class SceneFive < SKScene
     # Add instructions for this scene.
     add_label <<-HERE
     HERE
+
+    $scene = self
 
     # Spoiler alert. Buttons are just sprites. Everything is a sprite. Everything.
     @button_next = add_sprite( 50, 45, 'button.png', 'button-next', self)
@@ -40,11 +46,11 @@ class SceneFive < SKScene
     when 'button-out'
       node.xScale = 2
       node.yScale = 2
-      @camera.target_scale -= @camera.target_scale * 0.1
+      @camera.target_scale = @camera.target_scale * 0.9
     when 'button-in'
       node.xScale = 2
       node.yScale = 2
-      @camera.target_scale += @camera.target_scale * 0.1
+      @camera.target_scale = @camera.target_scale * 1.1
     when 'button-prev'
       node.xScale = 2
       node.yScale = 2
