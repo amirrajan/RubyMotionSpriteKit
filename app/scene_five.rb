@@ -19,14 +19,20 @@ class SceneFive < SKScene
     $scene = self
 
     # Spoiler alert. Buttons are just sprites. Everything is a sprite. Everything.
-    @button_next = add_sprite( 50, 45, 'button.png', 'button-next', self)
-    @button_next.zPosition = 1000
+    @button_left = add_sprite(50, 70, 'button.png', 'button-left', self)
+    @button_left.zPosition = 1000
+    @button_right = add_sprite(100, 70, 'button.png', 'button-right', self)
+    @button_right.zPosition = 1000
+
+    @button_up = add_sprite(75, 110, 'button.png', 'button-up', self)
+    @button_up.zPosition = 1000
+    @button_down = add_sprite(75, 30, 'button.png', 'button-down', self)
+    @button_down.zPosition = 1000
+
     @button_out  = add_sprite(190, 30, 'button.png', 'button-out', self)
     @button_out.zPosition = 1000
     @button_in   = add_sprite(190, 80, 'button.png', 'button-in', self)
     @button_in.zPosition = 1000
-    @button_prev = add_sprite(330, 45, 'button.png', 'button-prev', self)
-    @button_prev.zPosition = 1000
     @camera = Camera.new self
     @camera.scale_rate = 0.1
 
@@ -39,7 +45,7 @@ class SceneFive < SKScene
 
     # once you have the node location, you can look at its name to determine what you want to do with the node.
     case node.name
-    when 'button-next'
+    when 'button-right'
       node.xScale = 2
       node.yScale = 2
       @camera.pan_left
@@ -51,10 +57,18 @@ class SceneFive < SKScene
       node.xScale = 2
       node.yScale = 2
       @camera.target_scale = @camera.target_scale * 1.1
-    when 'button-prev'
+    when 'button-left'
       node.xScale = 2
       node.yScale = 2
       @camera.pan_right
+    when 'button-up'
+      node.xScale = 2
+      node.yScale = 2
+      @camera.pan_up
+    when 'button-down'
+      node.xScale = 2
+      node.yScale = 2
+      @camera.pan_down
     else
       first_touch = touches.allObjects.first
 
@@ -72,10 +86,13 @@ class SceneFive < SKScene
 
   def update _
     @squares.each { |s| s.zRotation += 0.1 }
-    bring_node_to_target_scale @button_next
+
+    bring_node_to_target_scale @button_right
     bring_node_to_target_scale @button_out
     bring_node_to_target_scale @button_in
-    bring_node_to_target_scale @button_prev
+    bring_node_to_target_scale @button_left
+    bring_node_to_target_scale @button_up
+    bring_node_to_target_scale @button_down
 
     @camera.update
   end

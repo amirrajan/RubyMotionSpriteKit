@@ -8,8 +8,15 @@ class SceneOne < SKScene
     # Set the aspect ratio.
     self.scaleMode = SKSceneScaleModeAspectFit
 
+    $scene = self
+
     # Set the background color to white.
-    self.backgroundColor = UIColor.whiteColor
+    # self.backgroundColor = UIColor.whiteColor
+
+    self.backgroundColor = UIColor.alloc.initWithRed(0.5,
+                                                     green: 0.5,
+                                                     blue: 0.5,
+                                                     alpha: 1.0)
 
     # Add a label to the scene.
     # A little bit of context. The primary class that is used to construct a label

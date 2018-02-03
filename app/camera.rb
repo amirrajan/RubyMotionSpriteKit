@@ -16,6 +16,16 @@ class Camera
     @node.addChild child
   end
 
+  def pan_up
+    @target_y ||= @node.position.x
+    @target_y += 200 * @node.xScale
+  end
+
+  def pan_down
+    @target_y ||= @node.position.x
+    @target_y -= 200 * @node.xScale
+  end
+
   def pan_left
     @target_x ||= @node.position.x
     @target_x += 200 * @node.xScale
@@ -26,29 +36,43 @@ class Camera
     @target_x -= 200 * @node.xScale
   end
 
-  def pan_up amount
-    @target_y = amount
+  def update_scale
+    differences = target_scale.round(2) - @node.xScale.round(2)
+
+    return unless differences != 0
+
+    current_width = @node.xScale * device_screen_width
+    current_height = @node.xScale * device_screen_height
+
+    @node.xScale += differences * @scale_rate
+    @node.yScale += differences * @scale_rate
+
+    new_width = @node.xScale * device_screen_width
+    new_height = @node.yScale * device_screen_height
+
+    width_difference = (new_width - current_width).fdiv(2)
+    height_difference = (new_height - current_height).fdiv(2)
+
+    new_center_x = (@target_x || @node.position.x) - width_difference
+    new_center_y = (@target_y || @node.position.y) - height_difference
+
+    @target_x = new_center_x
+    @target_y = new_center_y
+  end
+
+  def update_location
+    return if !@target_x && !@target_y
+
+    @node.position = CGPointMake(@node.position.x +
+                                 (((@target_x || @node.position.x) - @node.position.x) * @scale_rate),
+                                 @node.position.y +
+                                 (((@target_y || @node.position.y) - @node.position.y) * @scale_rate))
+    @target_x = nil if @target_x && @node.position.x.round(2) == @target_x.round(2)
+    @target_y = nil if @target_y && @node.position.y.round(2) == @target_y.round(2)
   end
 
   def update
-    differences = target_scale.round(2) - @node.xScale.round(2)
-    if differences != 0
-      @node.xScale += differences * @scale_rate
-      @node.yScale += differences * @scale_rate
-
-      target_x_difference = (@original_width - (@original_width * @node.xScale)).fdiv(2) - @node.position.x
-      target_y_difference = (@original_height - (@original_height * @node.yScale)).fdiv(2) - @node.position.y
-
-      @node.position = CGPointMake(@node.position.x + target_x_difference,
-                                   @node.position.y + target_y_difference)
-    end
-
-    if @target_x
-      @node.position = CGPointMake(@node.position.x +
-                                   (((@target_x || @node.position.x) - @node.position.x) * @scale_rate),
-                                   @node.position.y +
-                                   (((@target_y || @node.position.y) - @node.position.y) * @scale_rate))
-      @target_x = nil if @node.position.x.round(2) == @target_x.round(2)
-    end
+    update_scale
+    update_location
   end
 end
