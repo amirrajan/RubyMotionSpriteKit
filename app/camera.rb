@@ -75,11 +75,17 @@ class Camera
   end
 
   def update_trauma
-    return if @trauma == 0
+    return if @trauma.round(2) == 0
 
-    calculated_trauma = (3.14)
+    calculated_trauma = (3.14).fdiv(15) * @trauma * @trauma
 
-    @node.zRotation += 1
+    @trauma = @trauma * 0.9
+
+    if @node.zRotation >= 0
+      @node.zRotation = -calculated_trauma
+    else
+      @node.zRotation = calculated_trauma
+    end
   end
 
   def update
