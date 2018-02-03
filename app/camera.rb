@@ -1,7 +1,9 @@
 class Camera
   include ScreenSizes
 
-  attr_accessor :node, :target_scale, :target_position, :scale_rate
+  attr_accessor :node, :target_scale,
+                :target_position, :scale_rate,
+                :trauma
 
   def initialize parent
     @node = SKNode.new
@@ -9,6 +11,7 @@ class Camera
     @scale_rate = 0.3
     @original_width  = device_screen_width
     @original_height = device_screen_height
+    @trauma = 1
     parent.addChild @node
   end
 
@@ -71,8 +74,17 @@ class Camera
     @target_y = nil if @target_y && @node.position.y.round(2) == @target_y.round(2)
   end
 
+  def update_trauma
+    return if @trauma == 0
+
+    calculated_trauma = (3.14)
+
+    @node.zRotation += 1
+  end
+
   def update
     update_scale
     update_location
+    update_trauma
   end
 end
