@@ -11,6 +11,7 @@ class Camera
     @target_scale = 1
     @scale_rate = 0.3
     @trauma = 0
+    @positive_negative = [-1, 1]
     @node.addChild @main_layer
     @node.position = CGPointMake(device_screen_width.fdiv(2),
                                  device_screen_height.fdiv(2))
@@ -74,6 +75,14 @@ class Camera
     else
       @node.zRotation = calculated_trauma
     end
+
+    calculated_offset = 100 * @trauma * @trauma
+
+    offset_x = calculated_offset * rand * @positive_negative.sample
+    offset_y = calculated_offset * rand * @positive_negative.sample
+
+    @node.position = CGPointMake(device_screen_width.fdiv(2) +  offset_x,
+                                 device_screen_height.fdiv(2) + offset_y)
   end
 
   def update
