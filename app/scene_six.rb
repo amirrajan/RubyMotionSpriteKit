@@ -30,6 +30,8 @@ class SceneSix < SKScene
     $game = @game
 
     @ship = add_sprite(0, 0, 'square.png', 'ship', @camera.main_layer)
+    @bullet = add_sprite(-5000, 0, 'tiny-square.png', 'ship', @camera.main_layer)
+    @bullet.zPosition = @ship.zPosition - 1
   end
 
   def touchesBegan touches, withEvent: _
@@ -55,6 +57,10 @@ class SceneSix < SKScene
     @game.update
     @camera.update
     @ship.position = CGPointMake(@game.ship_x, @game.ship_y)
+
+    if @game.bullet_location_y && @game.bullet_location_x
+      @bullet.position = CGPointMake(@game.bullet_location_x, @game.bullet_location_y)
+    end
   end
 
   def add_sprite x, y, path, name, parent
@@ -62,7 +68,6 @@ class SceneSix < SKScene
     sprite = SKSpriteNode.spriteNodeWithTexture texture
     sprite.position = CGPointMake x, y
     sprite.name = name
-    sprite.size = CGSizeMake(50, 50)
     parent.addChild sprite
     sprite
   end
