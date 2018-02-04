@@ -12,10 +12,14 @@ class SceneSix < SKScene
     @game
   end
 
+
   def didMoveToView view
     self.scaleMode = SKSceneScaleModeAspectFit
     self.backgroundColor = UIColor.whiteColor
     self.view.multipleTouchEnabled = true
+    self.physicsWorld.gravity = CGVectorMake(0, 0)
+    self.physicsWorld.contactDelegate = self
+    self.view.showsPhysics = true
 
     @game_pad = {}
 
@@ -30,8 +34,19 @@ class SceneSix < SKScene
     $game = @game
 
     @ship = add_sprite(0, 0, 'square.png', 'ship', @camera.main_layer)
-    @bullet = add_sprite(-5000, 0, 'tiny-square.png', 'ship', @camera.main_layer)
+
+    @bullet = add_sprite(-5000, 0, 'tiny-square.png', 'bullet', @camera.main_layer)
+    @bullet.physicsBody = SKPhysicsBody.bodyWithRectangleOfSize @bullet.frame.size
     @bullet.zPosition = @ship.zPosition - 1
+    @bullet.physicsBody.dynamic = true
+    @bullet.physicsBody.categoryBitMask = 2
+    @bullet.physicsBody.contactTestBitMask = 4
+
+    @enemy = add_sprite(0, 0, 'square.png', 'enemy', @camera.main_layer)
+    @enemy.physicsBody = SKPhysicsBody.bodyWithRectangleOfSize @enemy.frame.size
+    @enemy.physicsBody.dynamic = true
+    @enemy.physicsBody.categoryBitMask = 4
+    @enemy.physicsBody.contactTestBitMask = 2
   end
 
   def touchesBegan touches, withEvent: _
@@ -44,6 +59,10 @@ class SceneSix < SKScene
     end
   end
 
+  def didBeginContact _
+    @game.enemy_was_hit
+  end
+
   def touchesEnded touches, withEvent: _
     @game_pad = { }
   end
@@ -54,12 +73,21 @@ class SceneSix < SKScene
     elsif @game_pad[:right] == :down
       @game.target_x = @game.target_x + 10
     end
+
     @game.update
     @camera.update
     @ship.position = CGPointMake(@game.ship_x, @game.ship_y)
 
+    if @game.enemy_x && @game.enemy_y
+      @enemy.position = CGPointMake(@game.enemy_x, @game.enemy_y)
+    else
+      @enemy.position = CGPointMake(-5000, -5000)
+    end
+
     if @game.bullet_location_y && @game.bullet_location_x
       @bullet.position = CGPointMake(@game.bullet_location_x, @game.bullet_location_y)
+    else
+      @bullet.position = CGPointMake(-5000, -5000)
     end
   end
 
