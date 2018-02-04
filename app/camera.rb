@@ -9,7 +9,7 @@ class Camera
     @node = SKNode.new
     @main_layer = SKNode.new
     @target_scale = origin_scale
-    @scale_rate = 0.3
+    @scale_rate = 0.1
     @trauma = 0
     @positive_negative = [-1, 1]
     @node.addChild @main_layer

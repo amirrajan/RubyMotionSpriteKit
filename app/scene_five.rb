@@ -3,6 +3,7 @@ class SceneFive < SKScene
 
   attr_accessor :root
 
+  # A little helper method that can be used to get the camera in the repl.
   def get_camera
     return @camera
   end
@@ -12,10 +13,11 @@ class SceneFive < SKScene
     self.backgroundColor = UIColor.whiteColor
     self.view.multipleTouchEnabled = true
 
+    #initalize a camera, all sprites go into the camera
     @camera = Camera.new self
-    @camera.scale_rate = 0.1
 
     # Add instructions for this scene.
+    # The add label method in this scene is a bit fancier. Take a look at it.
     add_label <<-HERE, 0, 0, 0.5, 0.5, @camera.main_layer
     This is the first screen that will actually look pretty okay on all devices.
 
@@ -32,26 +34,15 @@ class SceneFive < SKScene
     $scene = self
 
     # Spoiler alert. Buttons are just sprites. Everything is a sprite. Everything.
-    @button_left = add_sprite(50, 80, 'button.png', 'button-left', self)
-    @button_left.zPosition = 1000
-    @button_right = add_sprite(100, 80, 'button.png', 'button-right', self)
-    @button_right.zPosition = 1000
+    @button_left         = add_button( 50,  80, 'button-left')
+    @button_right        = add_button(100,  80, 'button-right')
+    @button_up           = add_button( 75, 120, 'button-up')
+    @button_down         = add_button( 75,  40, 'button-down')
+    @button_out          = add_button(190,  40, 'button-out')
+    @button_in           = add_button(190,  90, 'button-in')
+    @button_camera_shake = add_button(device_screen_width - 75, 80, 'button-shake')
 
-    @button_up = add_sprite(75, 120, 'button.png', 'button-up', self)
-    @button_up.zPosition = 1000
-    @button_down = add_sprite(75, 40, 'button.png', 'button-down', self)
-    @button_down.zPosition = 1000
-
-    @button_out  = add_sprite(190, 40, 'button.png', 'button-out', self)
-    @button_out.zPosition = 1000
-    @button_in   = add_sprite(190, 90, 'button.png', 'button-in', self)
-    @button_in.zPosition = 1000
-
-    @button_camera_shake = add_sprite(device_screen_width - 75, 80, 'button.png', 'button-shake', self)
-    @button_camera_shake.xScale = 1.5
-    @button_camera_shake.yScale = 1.5
-    @button_camera_shake.zPosition = 1000
-
+    # these are all the sprites
     @squares = []
   end
 
@@ -59,39 +50,37 @@ class SceneFive < SKScene
     # This is how you get the node at a specific location that was touched.
     node = nodeAtPoint(touches.allObjects.first.locationInNode(self))
 
-    # once you have the node location, you can look at its name to determine what you want to do with the node.
+    # once you have the node location, you can look at
+    # its name to determine what you want to do with the node.
     case node.name
     when 'button-right'
-      node.xScale = 2
-      node.yScale = 2
+      node.xScale = node.yScale = 2
       @camera.pan_left
     when 'button-out'
-      node.xScale = 2
-      node.yScale = 2
+      node.xScale = node.yScale = 2
       @camera.target_scale = @camera.target_scale * 0.9
     when 'button-in'
-      node.xScale = 2
-      node.yScale = 2
+      node.xScale = node.yScale = 2
       @camera.target_scale = @camera.target_scale * 1.1
     when 'button-left'
-      node.xScale = 2
-      node.yScale = 2
+      node.xScale = node.yScale = 2
       @camera.pan_right
     when 'button-up'
-      node.xScale = 2
-      node.yScale = 2
+      node.xScale = node.yScale = 2
       @camera.pan_up
     when 'button-down'
-      node.xScale = 2
-      node.yScale = 2
+      node.xScale = node.yScale = 2
       @camera.pan_down
     when 'button-shake'
-      node.xScale = 3
-      node.yScale = 3
+      node.xScale = node.yScale = 2
       @camera.trauma += 0.6
     else
+      # if the area that was tapped is not a button,
+      # get the touch location and add a sprite.
       first_touch = touches.allObjects.first
 
+      # the sprite should be added to the camera's main layer the `locationInNode`
+      # function is important to include when determining the x and y position.
       @squares << add_sprite(first_touch.locationInNode(@camera.main_layer).x,
                              first_touch.locationInNode(@camera.main_layer).y,
                              'square.png',
@@ -105,8 +94,19 @@ class SceneFive < SKScene
   end
 
   def update _
+    # Each tick, spin the square.
     @squares.each { |s| s.zRotation += 0.1 }
 
+    # update the camera (specifically zoom, scale, trauma etc).
+    @camera.update
+  end
+
+  def update_buttons
+    # For each button, set it's scale down to it's original
+    # value. Protip, never use subtraction or addition for
+    # incremental changes to a node. Always use a percent.
+    # Take a look at the bring_node_to_target_scale method to see
+    # what I mean.
     bring_node_to_target_scale @button_right
     bring_node_to_target_scale @button_out
     bring_node_to_target_scale @button_in
@@ -114,8 +114,6 @@ class SceneFive < SKScene
     bring_node_to_target_scale @button_up
     bring_node_to_target_scale @button_down
     bring_node_to_target_scale @button_camera_shake, 1.5
-
-    @camera.update
   end
 
   def bring_node_to_target_scale node, target_scale = 1
@@ -153,13 +151,20 @@ class SceneFive < SKScene
     end
   end
 
+  def add_button x, y, name, parent = self, scale = 1
+    button = add_sprite(x, y, 'button.png', name, parent)
+    button.zPosition = 1000
+    button.xScale = scale
+    button.yScale = scale
+    button
+  end
+
   def add_sprite x, y, path, name, parent
     texture = SKTexture.textureWithImageNamed path
     sprite = SKSpriteNode.spriteNodeWithTexture texture
     sprite.position = CGPointMake x, y
     sprite.name = name
     sprite.size = CGSizeMake(50, 50)
-    anchorPoint = CGPointMake 0.5, 0.5
     parent.addChild sprite
     sprite
   end
