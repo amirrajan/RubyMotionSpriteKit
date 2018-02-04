@@ -42,11 +42,21 @@ class SceneSix < SKScene
     @bullet.physicsBody.categoryBitMask = 2
     @bullet.physicsBody.contactTestBitMask = 4
 
-    @enemy = add_sprite(0, 0, 'square.png', 'enemy', @camera.main_layer)
-    @enemy.physicsBody = SKPhysicsBody.bodyWithRectangleOfSize @enemy.frame.size
-    @enemy.physicsBody.dynamic = true
-    @enemy.physicsBody.categoryBitMask = 4
-    @enemy.physicsBody.contactTestBitMask = 2
+    @enemy_sprites = []
+
+    @game.enemies.each do |e|
+      @enemy_sprites << add_enemy_sprite(e[:id], e[:x], e[:y])
+    end
+  end
+
+  def add_enemy_sprite(id, x, y)
+    enemy = add_sprite(x, y, 'square.png', 'enemy', @camera.main_layer)
+    enemy.name = id
+    enemy.physicsBody = SKPhysicsBody.bodyWithRectangleOfSize enemy.frame.size
+    enemy.physicsBody.dynamic = true
+    enemy.physicsBody.categoryBitMask = 4
+    enemy.physicsBody.contactTestBitMask = 2
+    enemy
   end
 
   def touchesBegan touches, withEvent: _
@@ -59,8 +69,13 @@ class SceneSix < SKScene
     end
   end
 
-  def didBeginContact _
-    @game.enemy_was_hit
+  def didBeginContact contact
+    if contact.bodyA.node == @bullet
+      @game.enemy_was_hit(contact.bodyB.node.name)
+    else
+      @game.enemy_was_hit(contact.bodyA.node.name)
+    end
+
   end
 
   def touchesEnded touches, withEvent: _
@@ -78,16 +93,19 @@ class SceneSix < SKScene
     @camera.update
     @ship.position = CGPointMake(@game.ship_x, @game.ship_y)
 
-    if @game.enemy_x && @game.enemy_y
-      @enemy.position = CGPointMake(@game.enemy_x, @game.enemy_y)
-    else
-      @enemy.position = CGPointMake(-5000, -5000)
-    end
-
     if @game.bullet_location_y && @game.bullet_location_x
       @bullet.position = CGPointMake(@game.bullet_location_x, @game.bullet_location_y)
     else
       @bullet.position = CGPointMake(-5000, -5000)
+    end
+
+    @enemy_sprites.each do |e|
+      e.position = CGPointMake(-5000, -5000)
+    end
+
+    @game.enemies.each do |e|
+      node = @camera.main_layer.childNodeWithName(e[:id])
+      node && node.position = CGPointMake(e[:x], e[:y])
     end
   end
 
