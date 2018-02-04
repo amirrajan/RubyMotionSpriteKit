@@ -67,7 +67,7 @@ class SceneTwo < SKScene
   end
 
   def add_label text
-    font_size = 16
+    font_size = 12
     wrapped_text = wrap 38, text
     wrapped_text.each_with_index do |s, i|
       label = SKLabelNode.labelNodeWithText s
@@ -75,8 +75,8 @@ class SceneTwo < SKScene
       label.fontColor = UIColor.blackColor
       label.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeLeft
       label.fontSize = font_size
-      label.position = CGPointMake(10,
-                                   device_screen_height - ((i + 1) * font_size))
+      label.position = CGPointMake(3,
+                                   device_screen_height - 50 - ((i + 1) * font_size))
       addChild label
     end
   end

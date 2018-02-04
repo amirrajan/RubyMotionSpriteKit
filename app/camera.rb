@@ -18,7 +18,7 @@ class Camera
 
     # setting the target_scale property will ease a camera to a
     # specific scale over time.
-    @target_scale = origin_scale
+    @target_scale = scale_for_device
 
     # this property controls how quickly the camera pans and zooms
     @scale_rate = 0.1
@@ -33,10 +33,10 @@ class Camera
     @node.position = CGPointMake(origin_x, origin_y)
 
     # the origin/beginning scale for a given device is calculated here.
-    @node.xScale = origin_scale
+    @node.xScale = scale_for_device
 
     # the origin/beginning scale for a given device is calculated here.
-    @node.yScale = origin_scale
+    @node.yScale = scale_for_device
 
     # add the camera to the parent
     parent.addChild @node
@@ -70,19 +70,19 @@ class Camera
     @origin_y
   end
 
-  def origin_scale
-    return @origin_scale if @origin_scale
+  def scale_for_device
+    return @scale_for_device if @scale_for_device
 
     if iPad?
-      @origin_scale = 0.70
+      @scale_for_device = 0.70
     elsif iPhoneX?
-      @origin_scale = 0.98
+      @scale_for_device = 0.98
     elsif iPhone6?
-      @origin_scale = 0.96
+      @scale_for_device = 0.96
     elsif iPhone6Plus?
-      @origin_scale = 0.92
+      @scale_for_device = 0.92
     elsif iPhone5?
-      @origin_scale = 0.95
+      @scale_for_device = 0.80
     end
   end
 

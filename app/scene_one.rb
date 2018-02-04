@@ -11,12 +11,7 @@ class SceneOne < SKScene
     $scene = self
 
     # Set the background color to white.
-    # self.backgroundColor = UIColor.whiteColor
-
-    self.backgroundColor = UIColor.alloc.initWithRed(0.5,
-                                                     green: 0.5,
-                                                     blue: 0.5,
-                                                     alpha: 1.0)
+    self.backgroundColor = UIColor.whiteColor
 
     # Add a label to the scene.
     # A little bit of context. The primary class that is used to construct a label
@@ -32,13 +27,13 @@ class SceneOne < SKScene
 
     2. The primary line you want to look at is the initialization of GameViewController.
 
-    3. Read app_delegate.rb and all the great comments? Cool.
+    3. Read app_delegate.rb and all the great comments. Cool?
 
     4. Now jump over to game_view_controller.rb. Read that file too.
 
-    5. The prefer.* methods hides ansillary iOS UI and makes your game full screen.
+    5. The prefer.* methods hide ansillary iOS UI and makes your game full screen.
 
-    6. The present_stage_select_scene method is where the magic happens for presenting this scene.
+    6. The present_scene_one method is where the magic happens for presenting this scene.
 
     7. Open scene_one.rb and read the code there.
 
@@ -53,7 +48,7 @@ class SceneOne < SKScene
   end
 
   def add_label text
-    font_size = 16
+    font_size = 12
     wrapped_text = wrap 38, text
     wrapped_text.each_with_index do |s, i|
       label = SKLabelNode.labelNodeWithText s
@@ -61,8 +56,7 @@ class SceneOne < SKScene
       label.fontColor = UIColor.blackColor
       label.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeLeft
       label.fontSize = font_size
-      label.position = CGPointMake(10,
-                                   device_screen_height - ((i + 1) * font_size))
+      label.position = CGPointMake(3, device_screen_height - 50 - ((i + 1) * font_size))
       addChild label
     end
   end

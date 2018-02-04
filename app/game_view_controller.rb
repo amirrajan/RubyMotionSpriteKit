@@ -19,8 +19,14 @@ class GameViewController < UIViewController
     super
     self.view = sk_view
     # The first time the app is loaded. Present scene one.
-    present_scene_one
+    present_scene_zero
     $controller = self
+  end
+
+  def present_scene_zero
+    @scene_zero = SceneZero.sceneWithSize(sk_view.frame.size)
+    @scene_zero.root = self
+    sk_view.presentScene @scene_zero
   end
 
   def present_scene_one

@@ -30,19 +30,21 @@ class SceneFive < SKScene
 
     Tap anywhere to add squares. Use the buttons at the bottom to pan, zoom, and shake the camera.
 
+    You'll want to read the code in scene_five.rb and camera.rb.
+
     Tap with multiple fingers to go to the next scene.
     HERE
 
     $scene = self
 
     # Spoiler alert. Buttons are just sprites. Everything is a sprite. Everything.
-    @button_left         = add_button( 50,  80, 'button-left')
-    @button_right        = add_button(100,  80, 'button-right')
+    @button_left         = add_button( 40,  80, 'button-left')
+    @button_right        = add_button(110,  80, 'button-right')
     @button_up           = add_button( 75, 120, 'button-up')
     @button_down         = add_button( 75,  40, 'button-down')
-    @button_out          = add_button(190,  40, 'button-out')
-    @button_in           = add_button(190,  90, 'button-in')
-    @button_camera_shake = add_button(device_screen_width - 75, 80, 'button-shake')
+    @button_out          = add_button(device_screen_width.fdiv(2),  40, 'button-out')
+    @button_in           = add_button(device_screen_width.fdiv(2),  90, 'button-in')
+    @button_camera_shake = add_button(device_screen_width - 40, 60, 'button-shake')
 
     # these are all the sprites
     @squares = []

@@ -28,9 +28,9 @@ class SceneFour < SKScene
     HERE
 
     # Spoiler alert. Buttons are just sprites. Everything is a sprite. Everything.
-    @button_1 = add_sprite( 50, 60, 'button.png', 'button 1')
-    @button_2 = add_sprite(190, 60, 'button.png', 'button 2')
-    @button_3 = add_sprite(330, 60, 'button.png', 'button 3')
+    @button_1 = add_sprite(50, 40, 'button.png', 'button 1')
+    @button_2 = add_sprite(device_screen_width.fdiv(2), 40, 'button.png', 'button 2')
+    @button_3 = add_sprite(device_screen_width - 50, 40, 'button.png', 'button 3')
   end
 
   def touchesBegan touches, withEvent: _
@@ -143,7 +143,7 @@ class SceneFour < SKScene
 
   def add_label text
     font_size = 12
-    wrapped_text = wrap 50, text
+    wrapped_text = wrap 38, text
     wrapped_text.each_with_index do |s, i|
       label = SKLabelNode.labelNodeWithText s
       label.fontName = 'Courier'
@@ -151,7 +151,7 @@ class SceneFour < SKScene
       label.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeLeft
       label.fontSize = font_size
       label.position = CGPointMake(10,
-                                   device_screen_height - ((i + 1) * font_size))
+                                   device_screen_height - 50 - ((i + 1) * font_size))
       addChild label
     end
   end
