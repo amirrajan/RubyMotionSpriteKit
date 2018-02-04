@@ -12,8 +12,21 @@ class SceneFive < SKScene
     self.backgroundColor = UIColor.whiteColor
     self.view.multipleTouchEnabled = true
 
+    @camera = Camera.new self
+    @camera.scale_rate = 0.1
+
     # Add instructions for this scene.
-    add_label <<-HERE
+    add_label <<-HERE, 0, 0, 0.5, 0.5, @camera.main_layer
+    This is the first screen that will actually look pretty okay on all devices.
+
+    Try running:
+    `rake device_name='iPhone X'`
+    `rake device_name='iPhone 8'`
+    `rake device_name='iPhone 8 Plus'`
+    `rake device_name='iPhone 5s'`
+    `rake device_name='iPad Pro (12.9-inch)'`
+
+    Tap anywhere to add squares. Use the buttons at the bottom to pan, zoom, and shake the camera.
     HERE
 
     $scene = self
@@ -38,9 +51,6 @@ class SceneFive < SKScene
     @button_camera_shake.xScale = 1.5
     @button_camera_shake.yScale = 1.5
     @button_camera_shake.zPosition = 1000
-
-    @camera = Camera.new self
-    @camera.scale_rate = 0.1
 
     @squares = []
   end
@@ -79,7 +89,6 @@ class SceneFive < SKScene
       node.xScale = 3
       node.yScale = 3
       @camera.trauma += 0.6
-      puts @camera.trauma
     else
       first_touch = touches.allObjects.first
 
@@ -119,7 +128,8 @@ class SceneFive < SKScene
     StringWrapper.wrap wrap_length, text
   end
 
-  def add_label text
+  def add_label text, x, y, anchor_x, anchor_y, parent
+    labels = []
     font_size = 12
     wrapped_text = wrap 50, text
     wrapped_text.each_with_index do |s, i|
@@ -128,9 +138,18 @@ class SceneFive < SKScene
       label.fontColor = UIColor.blackColor
       label.horizontalAlignmentMode = SKLabelHorizontalAlignmentModeLeft
       label.fontSize = font_size
-      label.position = CGPointMake(10,
-                                   device_screen_height - ((i + 1) * font_size))
-      addChild label
+      label.position = CGPointMake(x, y - ((i + 1) * font_size))
+      labels << label
+      parent.addChild label
+    end
+
+    max_width = labels.map { |l| l.frame.size.width }.max
+    total_height = labels.map { |l| l.frame.size.height }.inject(:+)
+
+    labels.each do |l|
+      delta_x = -max_width * anchor_x
+      delta_y = total_height * (1 - anchor_y)
+      l.position = CGPointMake(l.position.x + delta_x, l.position.y + delta_y)
     end
   end
 

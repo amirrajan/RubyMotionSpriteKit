@@ -8,14 +8,60 @@ class Camera
   def initialize parent
     @node = SKNode.new
     @main_layer = SKNode.new
-    @target_scale = 1
+    @target_scale = origin_scale
     @scale_rate = 0.3
     @trauma = 0
     @positive_negative = [-1, 1]
     @node.addChild @main_layer
-    @node.position = CGPointMake(device_screen_width.fdiv(2),
-                                 device_screen_height.fdiv(2))
+    @node.position = CGPointMake(origin_x, origin_y)
+    @node.xScale = origin_scale
+    @node.yScale = origin_scale
+
     parent.addChild @node
+  end
+
+  def origin_x
+    return @origin_x if @origin_x
+
+    @origin_x = device_screen_width.fdiv(2)
+
+    if iPad?
+      @origin_x -= 125.fdiv(2)
+    elsif iPhoneX?
+      @origin_x -= 4.fdiv(2)
+    elsif iPhone6?
+      @origin_x -= 7.fdiv(2)
+    elsif iPhone6Plus?
+      @origin_x -= 15.fdiv(2)
+    elsif iPhone5?
+      @origin_x -= 8.fdiv(2)
+    end
+
+    @origin_x
+  end
+
+  def origin_y
+    return @origin_y if @origin_y
+
+    @origin_y = device_screen_height.fdiv(2)
+
+    @origin_y
+  end
+
+  def origin_scale
+    return @origin_scale if @origin_scale
+
+    if iPad?
+      @origin_scale = 0.70
+    elsif iPhoneX?
+      @origin_scale = 0.98
+    elsif iPhone6?
+      @origin_scale = 0.96
+    elsif iPhone6Plus?
+      @origin_scale = 0.92
+    elsif iPhone5?
+      @origin_scale = 0.95
+    end
   end
 
   def addChild child
@@ -81,8 +127,8 @@ class Camera
     offset_x = calculated_offset * rand * @positive_negative.sample
     offset_y = calculated_offset * rand * @positive_negative.sample
 
-    @node.position = CGPointMake(device_screen_width.fdiv(2) +  offset_x,
-                                 device_screen_height.fdiv(2) + offset_y)
+    @node.position = CGPointMake(origin_x + offset_x,
+                                 origin_y + offset_y)
   end
 
   def update
