@@ -94,7 +94,7 @@ class SceneFive < SKScene
 
     return unless touches.allObjects.count > 1
 
-    root.present_scene_five
+    root.present_scene_six
   end
 
   def update _

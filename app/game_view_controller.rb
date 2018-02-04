@@ -59,6 +59,12 @@ class GameViewController < UIViewController
     sk_view.presentScene @scene_five
   end
 
+  def present_scene_six
+    @scene_five = SceneSix.sceneWithSize(sk_view.frame.size)
+    @scene_five.root = self
+    sk_view.presentScene @scene_five
+  end
+
   def sk_view
     @sk_view ||= SKView.alloc.initWithFrame screen_rect
   end
