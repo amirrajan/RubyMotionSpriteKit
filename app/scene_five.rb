@@ -29,6 +29,8 @@ class SceneFive < SKScene
     `rake device_name='iPad Pro (12.9-inch)'`
 
     Tap anywhere to add squares. Use the buttons at the bottom to pan, zoom, and shake the camera.
+
+    Tap with multiple fingers to go to the next scene.
     HERE
 
     $scene = self
@@ -96,6 +98,9 @@ class SceneFive < SKScene
   def update _
     # Each tick, spin the square.
     @squares.each { |s| s.zRotation += 0.1 }
+
+    # update button animations
+    update_buttons
 
     # update the camera (specifically zoom, scale, trauma etc).
     @camera.update

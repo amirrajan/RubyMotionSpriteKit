@@ -1,3 +1,6 @@
+# Here is a general camera concept. This is not meant to be a be all
+# end all camera. But should be used as a spring board for your own
+# camera needs.
 class Camera
   include ScreenSizes
 
@@ -6,17 +9,36 @@ class Camera
                 :trauma, :main_layer
 
   def initialize parent
+    # this node represents the camera and is centered in the center of
+    # the specific device (and specific scale)
     @node = SKNode.new
+
+    # all sprites in your game should be added to the main layer.
     @main_layer = SKNode.new
+
+    # setting the target_scale property will ease a camera to a
+    # specific scale over time.
     @target_scale = origin_scale
+
+    # this property controls how quickly the camera pans and zooms
     @scale_rate = 0.1
+
+    # this property controls how much shake is applied to the camera.
     @trauma = 0
+
+    # lookup array that is used for camera shakes.
     @positive_negative = [-1, 1]
+
     @node.addChild @main_layer
     @node.position = CGPointMake(origin_x, origin_y)
+
+    # the origin/beginning scale for a given device is calculated here.
     @node.xScale = origin_scale
+
+    # the origin/beginning scale for a given device is calculated here.
     @node.yScale = origin_scale
 
+    # add the camera to the parent
     parent.addChild @node
   end
 
@@ -68,6 +90,9 @@ class Camera
     @main_layer.addChild child
   end
 
+  # this is a sample method showning how you can control the camera,
+  # setting the target_y, target_x property of the camera will accomplish the
+  # same thing
   def pan_up
     @target_y ||= @main_layer.position.y
     @target_y -= 200 * @node.yScale
@@ -88,6 +113,15 @@ class Camera
     @target_x -= 200 * @node.xScale
   end
 
+  # this method needs to be called in the main update loop so that
+  # changes to scale, location, and trauma are applied.
+  def update
+    update_scale
+    update_location
+    update_trauma
+  end
+
+  # update to the target scale based on the scale rate
   def update_scale
     differences = target_scale.round(2) - @node.xScale.round(2)
 
@@ -97,9 +131,11 @@ class Camera
     @node.yScale += differences * @scale_rate
   end
 
+  # update to the target location based on the scale rate
   def update_location
     return if !@target_x && !@target_y
 
+    # maaaaaaaattttthhhh
     @main_layer.position = CGPointMake(@main_layer.position.x +
                                  (((@target_x || @main_layer.position.x) - @main_layer.position.x) * @scale_rate),
                                  @main_layer.position.y +
@@ -109,9 +145,12 @@ class Camera
     @target_y = nil if @target_y && @main_layer.position.y.round(2) == @target_y.round(2)
   end
 
+  # this is how camera shake is applied, play around with the values
+  # to find something that works well for you.
   def update_trauma
     return if @trauma.round(4) == 0
 
+    # rotational camera shake
     calculated_trauma = (3.14).fdiv(15) * @trauma * @trauma
 
     @trauma = @trauma * 0.9
@@ -122,6 +161,7 @@ class Camera
       @node.zRotation = calculated_trauma
     end
 
+    # positional camera shake
     calculated_offset = 100 * @trauma * @trauma
 
     offset_x = calculated_offset * rand * @positive_negative.sample
@@ -131,9 +171,4 @@ class Camera
                                  origin_y + offset_y)
   end
 
-  def update
-    update_scale
-    update_location
-    update_trauma
-  end
 end
