@@ -19,20 +19,22 @@ class SceneFive < SKScene
     $scene = self
 
     # Spoiler alert. Buttons are just sprites. Everything is a sprite. Everything.
-    @button_left = add_sprite(50, 70, 'button.png', 'button-left', self)
+    @button_left = add_sprite(50, 80, 'button.png', 'button-left', self)
     @button_left.zPosition = 1000
-    @button_right = add_sprite(100, 70, 'button.png', 'button-right', self)
+    @button_right = add_sprite(100, 80, 'button.png', 'button-right', self)
     @button_right.zPosition = 1000
 
-    @button_up = add_sprite(75, 110, 'button.png', 'button-up', self)
+    @button_up = add_sprite(75, 120, 'button.png', 'button-up', self)
     @button_up.zPosition = 1000
-    @button_down = add_sprite(75, 30, 'button.png', 'button-down', self)
+    @button_down = add_sprite(75, 40, 'button.png', 'button-down', self)
     @button_down.zPosition = 1000
 
-    @button_out  = add_sprite(190, 30, 'button.png', 'button-out', self)
+    @button_out  = add_sprite(190, 40, 'button.png', 'button-out', self)
     @button_out.zPosition = 1000
-    @button_in   = add_sprite(190, 80, 'button.png', 'button-in', self)
+    @button_in   = add_sprite(190, 90, 'button.png', 'button-in', self)
     @button_in.zPosition = 1000
+
+
     @camera = Camera.new self
     @camera.scale_rate = 0.1
 
