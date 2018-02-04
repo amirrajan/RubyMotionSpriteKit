@@ -39,7 +39,7 @@ Motion::Project::App.setup do |app|
   #    https://developer.apple.com/account/ios/identifier/bundle. You must enroll into Apple's
   #    Developer program to get access to this screen (there is an annual fee of $99).
   # ===========================================================================================
-  # app.identifier = ''
+  app.identifier = 'com.scratchworkdevelopment.sandbox'
 
   # ===========================================================================================
   # 5. If you need to reference any additional iOS libraries, use the config array below.
@@ -58,7 +58,7 @@ Motion::Project::App.setup do |app|
   #    The name of the certificate will be accessible via Keychain Access. Set the value you
   #    see there below.
   # ===========================================================================================
-  # app.codesign_certificate = ''
+  app.codesign_certificate = 'iPhone Developer: Amirali Rajan'
 
   # ===========================================================================================
   # 7. To deploy to an actual device, you will need to create a provisioning profile. First:
@@ -70,7 +70,7 @@ Motion::Project::App.setup do |app|
   #
   #    Download the profile and set the path to the download location below.
   # ===========================================================================================
-  # app.provisioning_profile = ''
+  app.provisioning_profile = './profiles/develoment.mobileprovision'
 
   # ===========================================================================================
   # 8. Similar to Step 7. Production, create a production certificate at:

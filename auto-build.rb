@@ -5,7 +5,7 @@ require 'find'
 require 'FileUtils'
 
 first_time = true
-@rake_command = "rake"
+@rake_command = "rake device"
 
 Signal.trap('INT') do
   puts ''
