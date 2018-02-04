@@ -6,7 +6,8 @@ class Camera
 
   attr_accessor :node, :target_scale,
                 :target_position, :scale_rate,
-                :trauma, :main_layer
+                :trauma, :main_layer, :target_y,
+                :target_x
 
   def initialize parent
     # this node represents the camera and is centered in the center of
@@ -40,6 +41,11 @@ class Camera
 
     # add the camera to the parent
     parent.addChild @node
+  end
+
+  def pin_to_bottom_middle
+    @origin_y = 40
+    @node.position = CGPointMake(origin_x, origin_y)
   end
 
   def origin_x
