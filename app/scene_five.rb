@@ -34,6 +34,10 @@ class SceneFive < SKScene
     @button_in   = add_sprite(190, 90, 'button.png', 'button-in', self)
     @button_in.zPosition = 1000
 
+    @button_camera_shake = add_sprite(device_screen_width - 75, 80, 'button.png', 'button-shake', self)
+    @button_camera_shake.xScale = 1.5
+    @button_camera_shake.yScale = 1.5
+    @button_camera_shake.zPosition = 1000
 
     @camera = Camera.new self
     @camera.scale_rate = 0.1
@@ -71,11 +75,16 @@ class SceneFive < SKScene
       node.xScale = 2
       node.yScale = 2
       @camera.pan_down
+    when 'button-shake'
+      node.xScale = 3
+      node.yScale = 3
+      @camera.trauma += 0.6
+      puts @camera.trauma
     else
       first_touch = touches.allObjects.first
 
-      @squares << add_sprite(first_touch.locationInNode(@camera.node).x,
-                             first_touch.locationInNode(@camera.node).y,
+      @squares << add_sprite(first_touch.locationInNode(@camera.main_layer).x,
+                             first_touch.locationInNode(@camera.main_layer).y,
                              'square.png',
                              "square-#{@squares.length + 1}",
                              @camera)
@@ -95,6 +104,7 @@ class SceneFive < SKScene
     bring_node_to_target_scale @button_left
     bring_node_to_target_scale @button_up
     bring_node_to_target_scale @button_down
+    bring_node_to_target_scale @button_camera_shake, 1.5
 
     @camera.update
   end

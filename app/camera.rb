@@ -3,79 +3,67 @@ class Camera
 
   attr_accessor :node, :target_scale,
                 :target_position, :scale_rate,
-                :trauma
+                :trauma, :main_layer
 
   def initialize parent
     @node = SKNode.new
+    @main_layer = SKNode.new
     @target_scale = 1
     @scale_rate = 0.3
-    @original_width  = device_screen_width
-    @original_height = device_screen_height
-    @trauma = 1
+    @trauma = 0
+    @node.addChild @main_layer
+    @node.position = CGPointMake(device_screen_width.fdiv(2),
+                                 device_screen_height.fdiv(2))
     parent.addChild @node
   end
 
   def addChild child
-    @node.addChild child
+    @main_layer.addChild child
   end
 
   def pan_up
-    @target_y ||= @node.position.x
-    @target_y += 200 * @node.xScale
+    @target_y ||= @main_layer.position.y
+    @target_y -= 200 * @node.yScale
   end
 
   def pan_down
-    @target_y ||= @node.position.x
-    @target_y -= 200 * @node.xScale
+    @target_y ||= @main_layer.position.y
+    @target_y += 200 * @node.yScale
   end
 
   def pan_left
-    @target_x ||= @node.position.x
+    @target_x ||= @main_layer.position.x
     @target_x += 200 * @node.xScale
   end
 
   def pan_right
-    @target_x ||= @node.position.x
+    @target_x ||= @main_layer.position.x
     @target_x -= 200 * @node.xScale
   end
 
   def update_scale
     differences = target_scale.round(2) - @node.xScale.round(2)
 
-    return unless differences != 0
-
-    current_width = @node.xScale * device_screen_width
-    current_height = @node.xScale * device_screen_height
+    return if differences.zero?
 
     @node.xScale += differences * @scale_rate
     @node.yScale += differences * @scale_rate
-
-    new_width = @node.xScale * device_screen_width
-    new_height = @node.yScale * device_screen_height
-
-    width_difference = (new_width - current_width).fdiv(2)
-    height_difference = (new_height - current_height).fdiv(2)
-
-    new_center_x = (@target_x || @node.position.x) - width_difference
-    new_center_y = (@target_y || @node.position.y) - height_difference
-
-    @target_x = new_center_x
-    @target_y = new_center_y
   end
 
   def update_location
     return if !@target_x && !@target_y
 
-    @node.position = CGPointMake(@node.position.x +
-                                 (((@target_x || @node.position.x) - @node.position.x) * @scale_rate),
-                                 @node.position.y +
-                                 (((@target_y || @node.position.y) - @node.position.y) * @scale_rate))
-    @target_x = nil if @target_x && @node.position.x.round(2) == @target_x.round(2)
-    @target_y = nil if @target_y && @node.position.y.round(2) == @target_y.round(2)
+    @main_layer.position = CGPointMake(@main_layer.position.x +
+                                 (((@target_x || @main_layer.position.x) - @main_layer.position.x) * @scale_rate),
+                                 @main_layer.position.y +
+                                 (((@target_y || @main_layer.position.y) - @main_layer.position.y) * @scale_rate))
+
+    @target_x = nil if @target_x && @main_layer.position.x.round(2) == @target_x.round(2)
+    @target_y = nil if @target_y && @main_layer.position.y.round(2) == @target_y.round(2)
   end
 
   def update_trauma
-    return if @trauma.round(2) == 0
+    return if @trauma.round(4) == 0
 
     calculated_trauma = (3.14).fdiv(15) * @trauma * @trauma
 
